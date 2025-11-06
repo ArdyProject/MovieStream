@@ -1,5 +1,5 @@
-<h1 align="center">Hi 👋, I'm MovieStream</h1>
-<h3 align="center">Hay Saya Ardy Hutasoit Pembuat website ini</h3>
+<h1 align="center">Hi 👋, I'm Ardy Hutasoit</h1>
+<h3 align="center">WEBSITE MOVIE FINDER & STREAM</h3>
 
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=ardyproject&label=Profile%20views&color=0e75b6&style=flat" alt="ardyproject" /> </p>
 
