@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineStream - Professional Movie & Series Platform</title>
+    <!-- MDB CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0f0f23;
+            --secondary-color: #1a1a3e;
+            --accent-color: #ff006e;
+            --text-light: #ffffff;
+            --text-muted: #a8a8b3;
+            --card-bg: #16213e;
+            --hover-bg: #1e3a5f;
+            --border-color: #2a2a4a;
+            --gradient-1: linear-gradient(135deg, red 0%, white 100%);
+            --gradient-2: linear-gradient(135deg, red 0%, white 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--primary-color);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Preloader Styles */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .preloader.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .preloader-content {
+            text-align: center;
+        }
+
+        .logo-animation {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        .logo-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 3px solid transparent;
+            border-top-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+        }
+
+        .logo-circle:nth-child(2) {
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+            border-top-color: #667eea;
+            animation-duration: 1.2s;
+            animation-direction: reverse;
+        }
+
+        .logo-circle:nth-child(3) {
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+            border-top-color: #764ba2;
+            animation-duration: 0.9s;
+        }
+
+        .logo-text {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .loading-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            animation: bounce 1.4s ease-in-out infinite both;
+        }
+
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+        .dot:nth-child(3) { animation-delay: 0; }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Main Content Styles */
+        .main-wrapper {
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.3s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 0, 110, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+        }
+
+        .floating-shapes {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.03;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            left: 10%;
+            background: var(--accent-color);
+            border-radius: 50%;
+            animation-duration: 25s;
+        }
+
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            right: 20%;
+            background: #667eea;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation-duration: 30s;
+            animation-delay: 5s;
+        }
+
+        .shape:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            left: 70%;
+            background: #764ba2;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            animation-duration: 35s;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-100px) rotate(120deg);
+            }
+            66% {
+                transform: translateY(100px) rotate(240deg);
+            }
+        }
+
+        /* Header */
+        .header-container {
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .search-container {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            padding: 1rem 4rem 1rem 2rem;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(255, 0, 110, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .search-button {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--accent-color);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 0, 110, 0.3);
+        }
+
+        .search-button:hover {
+            background: #ff1a75;
+            transform: translateY(-50%) scale(1.1) rotate(90deg);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 4rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-radius: 30px;
+            margin: 2rem 0;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        /* Movie Grid */
+        .movies-section {
+            padding: 3rem 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        #output {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            padding: 0 1rem;
+        }
+
+        .movie-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            border: 1px solid var(--border-color);
+            animation: fadeInUp 0.6s ease-out;
+            height: 100%;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .movie-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            border-color: var(--accent-color);
+        }
+
+        .movie-poster-container {
+            position: relative;
+            padding-top: 150%;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--card-bg) 100%);
+        }
+
+        .movie-poster {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .movie-card:hover .movie-poster {
+            transform: scale(1.1);
+        }
+
+        .movie-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .movie-card:hover .movie-overlay {
+            opacity: 1;
+        }
+
+        .play-button {
+            background: var(--accent-color);
+            border: none;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 0, 110, 0.4);
+        }
+
+        .play-button:hover {
+            transform: scale(1.15);
+            background: #ff1a75;
+            box-shadow: 0 12px 35px rgba(255, 0, 110, 0.6);
+        }
+
+        .play-button i {
+            font-size: 1.5rem;
+            margin-left: 3px;
+        }
+
+        .movie-info {
+            padding: 1.5rem;
+        }
+
+        .movie-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-light);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.4;
+        }
+
+        .movie-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .movie-year {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.4rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .movie-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(255, 193, 7, 0.2);
+            padding: 0.4rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            color: #ffc107;
+            font-weight: 600;
+        }
+
+        .movie-description {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .type-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 10;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .type-badge.movie {
+            background: rgba(76, 175, 80, 0.9);
+        }
+
+        .type-badge.series {
+            background: rgba(33, 150, 243, 0.9);
+        }
+
+        /* Loading and No Results */
+        .loading-spinner, .no-results {
+            text-align: center;
+            padding: 5rem 2rem;
+        }
+
+        .spinner-custom {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary-color);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 0;
+            margin-top: 5rem;
+        }
+
+        .footer-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .footer-link:hover {
+            color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            #output {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            #output {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .search-input {
+                padding: 0.8rem 3.5rem 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-container {
+                padding: 1rem 0;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .hero-section {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-content">
+            <div class="logo-animation">
+                <div class="logo-circle"></div>
+                <div class="logo-circle"></div>
+                <div class="logo-circle"></div>
+            </div>
+            <div class="logo-text">CINESTREAM<br>By Ardy Project</div>
+            <div class="loading-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Animation -->
+    <div class="bg-animation"></div>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+        <header class="header-container">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-3">
+                        <a href="#" class="logo">
+                            <i class="fas fa-play-circle"></i>
+                            CINESTREAM</a>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="search-container">
+                            <input type="text" id="searchInput" class="search-input" placeholder="Search movies, series...">
+                            <button class="search-button" id="searchButton">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-end">
+                        <span class="text-muted">Ad-Free Streaming</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <h1 class="hero-title">Cari Film Kamu Disini</h1>
+                <p class="hero-subtitle">Cepat, Aman dan Dipercaya Oleh Developer</p>
+            </section>
+
+            <!-- Movies Section -->
+            <section class="movies-section">
+                <h2 class="section-title">Search Results</h2>
+                
+                <div class="loading-spinner" id="loadingSpinner" style="display: none;">
+                    <div class="spinner-custom"></div>
+                    <p class="text-muted">Searching for content...</p>
+                </div>
+                
+                <div class="no-results" id="noResults" style="display: none;">
+                    <i class="fas fa-film fa-5x text-muted mb-4"></i>
+                    <h3 class="mb-3">No Results Found</h3>
+                    <p class="text-muted">Try searching with different keywords</p>
+                </div>
+
+                <div id="output"></div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="container text-center">
+                <div class="mb-4">
+                    <a href="https://github.com/ArdyProject" target="_blank" class="footer-link me-4">
+                        <i class="fab fa-github fa-2x"></i>
+                    </a>
+                    <a href="https://www.instagram.com/kingproject_ar?igsh=YXo1aDI5czBzN3c=" target="_blank" class="footer-link me-4">
+                        <i class="fab fa-instagram fa-2x"></i>
+                    </a>
+                                        <a href="https://t.me/BaoBao_Fang" target="_blank" class="footer-link me-4">
+                        <i class="fab fa-telegram fa-2x"></i>
+                    </a>
+                </div>
+                <p class="mb-3">
+                    <a href="https://github.com/ArdyProject/MovieStream" target="_blank" class="footer-link">Source Code</a>
+                </p>
+                <p class="text-muted mb-0">© 2025 CineStream. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- MDB JS -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.umd.min.js"></script>
+    
+    <script>
+        const API_KEY = '981106c9230a01741e79a1bb8b2890d8';
+        const BASE_URL = 'https://api.themoviedb.org/3';
+        const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+        
+        let debounceTimeout;
+
+        // Preloader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').classList.add('hide');
+            }, 2000);
+        });
+
+        document.getElementById('searchInput').addEventListener('input', () => {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(fetchData, 300);
+        });
+
+        document.getElementById('searchButton').addEventListener('click', () => {
+            clearTimeout(debounceTimeout);
+            fetchData();
+        });
+
+        async function fetchData() {
+            const input = document.getElementById('searchInput').value;
+            if (input.trim() === '') {
+                document.getElementById('output').innerHTML = '';
+                document.getElementById('noResults').style.display = 'none';
+                return;
+            }
+            
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById('noResults').style.display = 'none';
+            document.getElementById('output').innerHTML = '';
+            
+            const url = `${BASE_URL}/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(input)}&language=en-US&page=1`;
+            
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                displayResults(data.results);
+            } catch (error) {
+                document.getElementById('output').innerHTML = '';
+                document.getElementById('noResults').style.display = 'block';
+                console.error('Error fetching data:', error);
+            } finally {
+                document.getElementById('loadingSpinner').style.display = 'none';
+            }
+        }
+
+        async function getImdbId(tmdbId, mediaType) {
+            const url = `${BASE_URL}/${mediaType}/${tmdbId}/external_ids?api_key=${API_KEY}`;
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                return data.imdb_id;
+            } catch (error) {
+                console.error('Error fetching IMDB ID:', error);
+                return null;
+            }
+        }
+
+        async function displayResults(results) {
+            const output = document.getElementById('output');
+            output.innerHTML = '';
+            
+            const filteredResults = results.filter(item => 
+                item.media_type === 'movie' || item.media_type === 'tv'
+            );
+            
+            if (filteredResults.length === 0) {
+                document.getElementById('noResults').style.display = 'block';
+                return;
+            }
+            
+            for (const item of filteredResults) {
+                const imdbId = await getImdbId(item.id, item.media_type);
+                if (!imdbId) continue;
+                
+                const type = item.media_type === 'movie' ? 'Movie' : 'TV Series';
+                const releaseDate = item.release_date || item.first_air_date;
+                const year = releaseDate ? new Date(releaseDate).getFullYear() : 'N/A';
+                
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.onclick = () => openVideoPlayer(imdbId, item.media_type, item.title || item.name, item.overview, item.vote_average, year);
+                
+                card.innerHTML = `
+                    <div class="movie-poster-container">
+                        <img src="${item.poster_path ? IMAGE_BASE_URL + item.poster_path : 'https://via.placeholder.com/300x450'}" 
+                             class="movie-poster" alt="${item.title || item.name}">
+                        <span class="type-badge ${item.media_type}">${type}</span>
+                        <div class="movie-overlay">
+                            <button class="play-button">
+                                <i class="fas fa-play text-white"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="movie-info">
+                        <h5 class="movie-title">${item.title || item.name}</h5>
+                        <div class="movie-meta">
+                            <span class="movie-year">${year}</span>
+                            ${item.vote_average ? `
+                                <span class="movie-rating">
+                                    <i class="fas fa-star"></i>
+                                    ${item.vote_average.toFixed(1)}
+                                </span>
+                            ` : ''}
+                        </div>
+                        <p class="movie-description">${item.overview ? item.overview.substring(0, 120) + (item.overview.length > 120 ? '...' : '') : 'No description available'}</p>
+                    </div>
+                `;
+                output.appendChild(card);
+            }
+        }
+
+        function openVideoPlayer(imdbId, mediaType, title, description, rating, year) {
+            const videoData = {
+                imdbId: imdbId,
+                mediaType: mediaType,
+                title: title,
+                description: description || 'No description available',
+                rating: rating || 0,
+                year: year || 'N/A'
+            };
+            
+            // Store data in sessionStorage for the new tab
+            sessionStorage.setItem('videoData', JSON.stringify(videoData));
+            
+            // Open video player in new tab
+            const playerWindow = window.open('player.html', '_blank');
+            
+            // Fallback if popup is blocked
+            if (!playerWindow) {
+                alert('Please allow popups to open the video player');
+            }
+        }
+    </script>
+</body>
+</html>
