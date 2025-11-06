@@ -7,7 +7,7 @@
 <p align="left">
 <a href="https://instagram.com/kingproject_ar" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" alt="kingproject_ar" height="30" width="40" /></a>
 <a href="https://youtube.com/@feng_bao_bao?si=FGQgSTwY4mG5Yvv8" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/youtube.svg" alt="feng_bao_bao" height="30" width="40" /></a>
-<a href="https://t.me/BaoBao_Fang" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/telegram.svg" alt="kingproject_ar" height="30" width="40" /></a>
+<a href="https://t.me/BaoBao_Fang" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/telegram.svg" alt="BaoBao_Fang" height="30" width="40" /></a>
 <a
 </p>
 
